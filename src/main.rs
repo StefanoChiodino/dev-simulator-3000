@@ -1,14 +1,5 @@
 
 
-struct Job {
-    work_units_cost: i32,
-    title: String,
-}
-
-struct Dev {
-    name: String,
-}
-
 #[allow(dead_code)]
 mod demo;
 #[allow(dead_code)]
@@ -90,7 +81,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     loop {
         terminal.draw(|f| ui::draw(f, &mut app))?;
-        //terminal.draw(|f| draw(f, &mut app))?;
         match rx.recv()? {
             Event::Input(event) => match event.code {
                 KeyCode::Char('q') => {
