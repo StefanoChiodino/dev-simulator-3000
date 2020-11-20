@@ -1,7 +1,7 @@
 use crate::demo::App;
 use tui::{
     backend::Backend,
-    layout::{Constraint, Direction, Layout, Rect},
+    layout::{Alignment,Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
     symbols,
     text::{Span, Spans},
@@ -19,20 +19,16 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
     let top_bottom = Layout::default()
                     .direction(Direction::Vertical)
                     .margin(0)
-                    .constraints([Constraint::Length(5), Constraint::Min(0)].as_ref())
+                    .constraints([Constraint::Length(1), Constraint::Min(0)].as_ref())
                     .split(f.size());
-    let s = "Veeeeeeeeeeeeeeeery    loooooooooooooooooong   striiiiiiiiiiiiiiiiiiiiiiiiiing.   ";
-    let mut long_line = s.repeat(usize::from(size.width) / s.len() + 4);
-    long_line.push('\n');
-    let text = vec![
-        Spans::from(app.world_datetime.to_string()),
-    ];
-    let top_paragraph = Paragraph::new(text.clone());
+    let text = vec![Spans::from(app.world_datetime.to_string())];
+    let top_paragraph = Paragraph::new(text.clone())
+        .alignment(Alignment::Center);
     f.render_widget(top_paragraph, top_bottom[0]);
 
     let panels = Layout::default()
                 .direction(Direction::Horizontal)
-                .margin(4)
+                .margin(0)
                 .constraints([Constraint::Percentage(50), Constraint::Percentage(50)].as_ref())
                 .split(top_bottom[1]);
 
