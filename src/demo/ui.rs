@@ -19,9 +19,13 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
     let top_bottom = Layout::default()
                     .direction(Direction::Vertical)
                     .margin(0)
-                    .constraints([Constraint::Length(1), Constraint::Min(0)].as_ref())
+                    .constraints([Constraint::Length(3), Constraint::Min(0)].as_ref())
                     .split(f.size());
-    let text = vec![Spans::from(app.world_datetime.to_string())];
+    let text = vec![Spans::from(vec![
+        Span::raw(app.world_datetime.to_string()),
+        Span::raw("         "),
+        Span::raw(app.jobs[&1].man_hours_remaining.to_string())
+        ])];
     let top_paragraph = Paragraph::new(text.clone())
         .alignment(Alignment::Center);
     f.render_widget(top_paragraph, top_bottom[0]);
@@ -40,7 +44,7 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         .border_type(BorderType::Rounded);
 
     
-    let job_items: Vec<ListItem> = app.job_list.iter().map(|j| ListItem::new(j.title.to_string())).collect();
+    let job_items: Vec<ListItem> = app.jobs.iter().map(|(_, j)| ListItem::new(j.title.to_string())).collect();
 
     let job_list = List::new(job_items)
         .block(job_block)
@@ -57,7 +61,7 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         .title("Dev")
         .border_type(BorderType::Rounded);
 
-    let dev_items: Vec<ListItem> = app.dev_list.iter().map(|d| ListItem::new(d.name.to_string())).collect();
+    let dev_items: Vec<ListItem> = app.devs.iter().map(|(_, d)| ListItem::new(d.name.to_string())).collect();
     let dev_list = List::new(dev_items)
         .block(dev_block)
         .style(Style::default().fg(Color::White))
