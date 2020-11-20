@@ -8,12 +8,12 @@ use tui::{
     widgets::canvas::{Canvas, Line, Map, MapResolution, Rectangle},
     widgets::{
         Axis, BarChart, Block, Borders, Chart, Dataset, Gauge, LineGauge, List, ListItem,
-        Paragraph, Row, Sparkline, Table, Tabs, Wrap,
+        Paragraph, Row, Sparkline, Table, Tabs, Wrap, BorderType
     },
     Frame,
 };
 
-pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
+pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {/* 
     let chunks = Layout::default()
         .constraints([Constraint::Length(3), Constraint::Min(0)].as_ref())
         .split(f.size());
@@ -32,9 +32,32 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         0 => draw_first_tab(f, app, chunks[1]),
         1 => draw_second_tab(f, app, chunks[1]),
         _ => {}
-    };
-}
+    }; */
 
+
+    let size = f.size();
+
+
+    let chunks = Layout::default()
+                .direction(Direction::Horizontal)
+                .margin(4)
+                .constraints([Constraint::Percentage(50), Constraint::Percentage(50)].as_ref())
+                .split(f.size());
+
+    let job_block = Block::default()
+        .borders(Borders::ALL)
+        .title("Jobs")
+        .border_type(BorderType::Rounded);
+    f.render_widget(job_block, chunks[0]);
+
+    let dev_block = Block::default()
+        .borders(Borders::ALL)
+        .title("Dev")
+        .border_type(BorderType::Rounded);
+    f.render_widget(dev_block, chunks[1]);
+
+}
+/* 
 fn draw_first_tab<B>(f: &mut Frame<B>, app: &mut App, area: Rect)
 where
     B: Backend,
@@ -371,3 +394,4 @@ where
         .y_bounds([-90.0, 90.0]);
     f.render_widget(map, chunks[1]);
 }
+ */

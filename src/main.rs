@@ -46,6 +46,9 @@ struct Cli {
     enhanced_graphics: bool,
 }
 
+
+
+
 fn main() -> Result<(), Box<dyn Error>> {
     let cli: Cli = argh::from_env();
 
@@ -81,12 +84,13 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     });
 
-    let mut app = App::new("Crossterm Demo", cli.enhanced_graphics);
+    let mut app = App::new("Dev Simulator 3000", cli.enhanced_graphics);
 
     terminal.clear()?;
 
     loop {
         terminal.draw(|f| ui::draw(f, &mut app))?;
+        //terminal.draw(|f| draw(f, &mut app))?;
         match rx.recv()? {
             Event::Input(event) => match event.code {
                 KeyCode::Char('q') => {
@@ -99,11 +103,11 @@ fn main() -> Result<(), Box<dyn Error>> {
                     terminal.show_cursor()?;
                     break;
                 }
-                KeyCode::Char(c) => app.on_key(c),
-                KeyCode::Left => app.on_left(),
+                // KeyCode::Char(c) => app.on_key(c),
+                /* KeyCode::Left => app.on_left(),
                 KeyCode::Up => app.on_up(),
                 KeyCode::Right => app.on_right(),
-                KeyCode::Down => app.on_down(),
+                KeyCode::Down => app.on_down(), */
                 _ => {}
             },
             Event::Tick => {
