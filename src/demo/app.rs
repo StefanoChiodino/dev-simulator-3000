@@ -1,3 +1,5 @@
+use chrono::prelude::*;
+
 pub struct Job {
     pub work_units_cost: i32,
     pub title: String,
@@ -10,11 +12,13 @@ pub struct Dev {
 pub struct App<'a> {
     pub title: &'a str,
     pub should_quit: bool,
-    pub progress: f64,
+    
     pub enhanced_graphics: bool,
 
     pub job_list: Vec<Job>,
     pub dev_list: Vec<Dev>,
+
+    pub world_datetime: DateTime<Utc>,
 }
 
 impl<'a> App<'a> {
@@ -22,10 +26,10 @@ impl<'a> App<'a> {
         App {
             title,
             should_quit: false,
-            progress: 0.0,
             enhanced_graphics,
             job_list: vec![Job{title:"Job 1".to_string(), work_units_cost: 2}],
-            dev_list: vec![{Dev{name:"Dev 1".to_string()}}]
+            dev_list: vec![{Dev{name:"Dev 1".to_string()}}],
+            world_datetime: Utc.ymd(2005, 1, 1).and_hms(0, 0, 0)
         }
     }
 
@@ -40,9 +44,6 @@ impl<'a> App<'a> {
 
     pub fn on_tick(&mut self) {
         // Update progress
-        self.progress += 0.001;
-        if self.progress > 1.0 {
-            self.progress = 0.0;
-        }
+        self.world_datetime = self.world_datetime + chrono::Duration::seconds(1);
     }
 }

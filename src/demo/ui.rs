@@ -16,11 +16,25 @@ use tui::{
 pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
     let size = f.size();
 
-    let chunks = Layout::default()
+    let top_bottom = Layout::default()
+                    .direction(Direction::Vertical)
+                    .margin(0)
+                    .constraints([Constraint::Length(5), Constraint::Min(0)].as_ref())
+                    .split(f.size());
+    let s = "Veeeeeeeeeeeeeeeery    loooooooooooooooooong   striiiiiiiiiiiiiiiiiiiiiiiiiing.   ";
+    let mut long_line = s.repeat(usize::from(size.width) / s.len() + 4);
+    long_line.push('\n');
+    let text = vec![
+        Spans::from(app.world_datetime.to_string()),
+    ];
+    let top_paragraph = Paragraph::new(text.clone());
+    f.render_widget(top_paragraph, top_bottom[0]);
+
+    let panels = Layout::default()
                 .direction(Direction::Horizontal)
                 .margin(4)
                 .constraints([Constraint::Percentage(50), Constraint::Percentage(50)].as_ref())
-                .split(f.size());
+                .split(top_bottom[1]);
 
     
 
@@ -38,7 +52,7 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         .highlight_style(Style::default().add_modifier(Modifier::ITALIC))
         .highlight_symbol(">>");  
         
-    f.render_widget(job_list, chunks[0]);
+    f.render_widget(job_list, panels[0]);
 
 
 
@@ -54,5 +68,5 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         .highlight_style(Style::default().add_modifier(Modifier::ITALIC))
         .highlight_symbol(">>");  
         
-    f.render_widget(dev_list, chunks[1]);
+    f.render_widget(dev_list, panels[1]);
 }
