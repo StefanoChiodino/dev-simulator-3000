@@ -1,14 +1,3 @@
-
-
-struct Job {
-    work_units_cost: i32,
-    title: String,
-}
-
-struct Dev {
-    name: String,
-}
-
 #[allow(dead_code)]
 mod demo;
 #[allow(dead_code)]
