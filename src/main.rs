@@ -75,7 +75,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     });
 
-    let mut app = App::new("Dev Simulator 3000", cli.enhanced_graphics, tick_rate);
+    let mut app = App::new("Dev Simulator 3000", cli.enhanced_graphics, chrono::Duration::from_std(tick_rate).unwrap());
 
     terminal.clear()?;
 

@@ -12,6 +12,7 @@ use tui::{
     },
     Frame,
 };
+use std::fmt::Display;
 
 pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
     let size = f.size();
@@ -22,9 +23,7 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
                     .constraints([Constraint::Length(3), Constraint::Min(0)].as_ref())
                     .split(f.size());
     let text = vec![Spans::from(vec![
-        Span::raw(app.world_datetime.to_string()),
-        Span::raw("         "),
-        Span::raw(app.jobs[&1].man_hours_remaining.to_string())
+        Span::raw(app.world_datetime.to_string())
         ])];
     let top_paragraph = Paragraph::new(text.clone())
         .alignment(Alignment::Center);
@@ -44,7 +43,9 @@ pub fn draw<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         .border_type(BorderType::Rounded);
 
     
-    let job_items: Vec<ListItem> = app.jobs.iter().map(|(_, j)| ListItem::new(j.title.to_string())).collect();
+    let job_items: Vec<ListItem> = app.jobs.iter().map(|(_, j)|
+        ListItem::new(format!("{} {}h tot - {}h left - {:.0}%", j.title.to_string(), j.duration.num_hours(), j.duration_remaining.num_hours(), j.duration_remaining.num_milliseconds() as f64 / j.duration.num_milliseconds() as f64 * 100.))
+    ).collect();
 
     let job_list = List::new(job_items)
         .block(job_block)
